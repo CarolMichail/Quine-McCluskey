@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.23"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "DigitalDesignProj1_QuinnMclusky",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "DigitalDesignProj1_QuinnMclusky::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-DigitalDesignProj1_QuinnMclusky-Debug-ce394d60659490581fc4.json",
+					"name" : "DigitalDesignProj1_QuinnMclusky",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/DELL/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/cmake-build-debug",
+		"source" : "C:/Users/DELL/Documents/GitHub/DigitalDesignProj1-QuinnMclusky"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
