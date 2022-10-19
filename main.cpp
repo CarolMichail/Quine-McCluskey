@@ -138,8 +138,14 @@ void print(){
     }
 }
 
+
+    
+    
+    
+    
+}
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
+    string file = R"(/Users/janasaleh/Documents/GitHub/DigitalDesignProj1-QuinnMclusky)";
     read_input(file);
     binaryReps();
     generateOnes();
