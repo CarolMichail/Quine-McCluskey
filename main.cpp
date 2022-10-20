@@ -16,6 +16,8 @@ struct minterm{
     bool dc; //determine whether it's a don't care or not, we only need to determine it for when we creat ethe coverage chart
 };
 
+vector<minterm> primes; //the prime implicants genertaed after the tabulation method and to be used in the coverage chart
+
 vector <minterm> mts; //list of all the terms, don't cares and minterms
 int bits; //# of bits
 vector<int> mt, dc; //these are minterms and don't cares
@@ -42,7 +44,6 @@ void read_input(string file) //funtion to read the txt file
     while(getline(mts,line)){
         lines.push_back(line); //reading in each line
     }
-
     bits = stoi((lines[0])); //assignning the first line to the # of bits
     stringstream s(lines[1]);
     string temp;
@@ -57,7 +58,6 @@ void read_input(string file) //funtion to read the txt file
     mts.close();
 }
 void binaryReps() {
-
     for (int i = 0; i < mt.size(); i++) { //turning the minterms into string to make sure the number of digits equals the number of variables AKA adding zeros on the left of the number 1 to have 3 digits 1 -> 001
         string temp = inttobin(mt[i]); //turning the decimal value of a number into a string representing the binary value
         bool length = 0;
@@ -100,7 +100,6 @@ void generateOnesforminterms(){ //a function that counts the ones for each binar
     }
 }
 
-
 void fill_struct(){ //we're filling the vector of structs
     for(int i = 0; i < mt.size(); i++){
         struct minterm obj; //we create an instance and then push into the vector
@@ -123,17 +122,19 @@ bool compareOnes(minterm one, minterm two){ //define a function to act as the co
     if(one.numof1s != two.numof1s) return one.numof1s < two.numof1s;
     if(one.numof1s == two.numof1s) return one.numof1s < two.numof1s;
 }
-void print(){ //printing to check the vector
+
+
+void print(vector<minterm> pi){ //printing to check the vector
     cout << "Properties: Minterms" << setw(30) << "Binary" << setw(30) << "Number of Ones" << setw(30) << endl;
-    for(int i = 0; i < mts.size(); i++){
-        if(mts[i].decimal != -1) cout << setw(15) << mts[i].decimal << setw(35) << mts[i].binary << setw(28) << mts[i].numof1s << endl;
+    for(int i = 0; i < pi.size(); i++){
+        if(pi[i].decimal != -1) cout << setw(15) << pi[i].decimal << setw(35) << pi[i].binary << setw(28) << pi[i].numof1s << endl;
         else{
             cout << setw(5);
-            for(int j = 0; j < mts[i].ms.size()-1; j++){
-                cout << "m" << mts[i].ms[j].decimal << ", ";
+            for(int j = 0; j < pi[i].ms.size()-1; j++){
+                cout << "m" << pi[i].ms[j].decimal << ", ";
             }
 
-            cout << "m" << mts[i].ms[mts[i].ms.size()-1].decimal << setw(35) << mts[i].binary << setw(33) << mts[i].numof1s << endl;
+            cout << "m" << pi[i].ms[pi[i].ms.size()-1].decimal << setw(35) << pi[i].binary << setw(33) << pi[i].numof1s << endl;
         }
     }
 }
@@ -166,7 +167,6 @@ bool compareMTs(minterm& a, minterm& b, minterm& c){ //function to compare minte
 
 void tabulationMethod() {
     int begin = 0, end = mts.size();
-
     bool addition = true;
 
     while (addition) { //checks if anymore columns have been added
@@ -192,8 +192,13 @@ void tabulationMethod() {
     }
 }
 
-void cleanSet(){
-
+void removeDuplicates(){
+    set<string> pis; //we use the fact that the set does not accept values that it already has
+    for(int i = 0; i < mts.size(); i++){
+        int increase = pis.size(); //we check each element, if it is accepted into the set, then it is unique and we insert it
+        pis.insert(mts[i].binary);
+        if(pis.size() != increase && mts[i].paired == false) primes.push_back(mts[i]); //if it is unique AND has not been paired w another minterm or prime implicant, then it will be used in the coverage chart
+    }
 }
 
 int main() {
@@ -202,10 +207,11 @@ int main() {
     binaryReps();
     generateOnesforminterms();
     fill_struct();
-    sort(mts.begin(), mts.end(), compareOnes); mts[1];
-
+    sort(mts.begin(), mts.end(), compareOnes);
     tabulationMethod();
-    print();
+    //print(mts);
+    removeDuplicates();
+    print(primes);
 
     return 0;
 }
