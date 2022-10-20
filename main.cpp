@@ -21,6 +21,10 @@ int bits; //# of bits
 vector<int> mt, dc; //these are minterms and don't cares
 vector<string> minterms, dontcares; // minterms and don't cares as strings
 vector<int> mtOnes, dcOnes; //number of ones in each binary number
+vector<int>allterms; // for validation of repeated terms
+int mintermscount=0; //for validation
+int dccount=0; //for validation
+
 
 string inttobin(int n){ //using bitmasking to get the binary representation of each number
     string s = "";
@@ -48,14 +52,41 @@ void read_input(string file) //funtion to read the txt file
     string temp;
     while( s >> temp){ //push back each minterm into a vector
         mt.push_back(stoi(temp));
+        allterms.push_back(temp);
+                   mintermscount++;
+
     }
     stringstream dcs(lines[2]);
     while(dcs >> temp){// push back each don't care term into a vector
         dc.push_back(stoi(temp));
+        dccount++; //counter of dont cares to use in validation
+        allterms.push_back(temp); // push in new vector fro validations
+
     }
 
     mts.close();
 }
+
+bool validation() {
+    if (bits>20) {
+        return 0; }// check number of bits
+    int x=pow(2,bits);
+    if (mintermscount>x) { //right number of minterms 
+        if (dccount>mintermscount) {
+            return 0;}
+   for (int i=0; i<allterms.size(); i++) { // check for repeated terms
+        if(allterms[i]==allterms[i+1] ) {
+            return 0;}
+   }
+    }
+    return 1;
+}
+
+
+
+
+
+
 void binaryReps() {
 
     for (int i = 0; i < mt.size(); i++) { //turning the minterms into string to make sure the number of digits equals the number of variables AKA adding zeros on the left of the number 1 to have 3 digits 1 -> 001
@@ -199,13 +230,19 @@ void cleanSet(){
 int main() {
     string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
     read_input(file);
-    binaryReps();
-    generateOnesforminterms();
-    fill_struct();
-    sort(mts.begin(), mts.end(), compareOnes); mts[1];
-
-    tabulationMethod();
-    print();
+    if(validation()==true)
+       {
+           binaryReps();
+           generateOnesforminterms();
+           fill_struct();
+           sort(mts.begin(), mts.end(), compareOnes); mts[1];
+           tabulationMethod();
+           print();
+       }
+    
+    
+    
+    
 
     return 0;
 }
