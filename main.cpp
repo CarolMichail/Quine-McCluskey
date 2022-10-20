@@ -209,7 +209,8 @@ int main() {
     fill_struct();
     sort(mts.begin(), mts.end(), compareOnes);
     tabulationMethod();
-    //print(mts);
+    print(mts);
+    cout << endl << endl << "AFTER REMOVING DUPLICATES\n";
     removeDuplicates();
     print(primes);
 
