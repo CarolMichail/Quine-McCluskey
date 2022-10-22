@@ -24,6 +24,8 @@ vector<int> mt, dc; //these are minterms and don't cares
 vector<string> minterms, dontcares; // minterms and don't cares as strings
 vector<int> mtOnes, dcOnes; //number of ones in each binary number
 
+vector<int> valid; //an array to use inside the validation function
+
 string inttobin(int n){ //using bitmasking to get the binary representation of each number
     string s = "";
     while(n > 0){
@@ -57,6 +59,12 @@ void read_input(string file) //funtion to read the txt file
 
     mts.close();
 }
+
+void validation(){
+    for(int i = 0; i < mt.size(); i++) valid.push_back(mt[i]);
+    for(int i = 0; i < dc.size(); i++) valid.push_back(dc[i]);
+}
+
 void binaryReps() {
     for (int i = 0; i < mt.size(); i++) { //turning the minterms into string to make sure the number of digits equals the number of variables AKA adding zeros on the left of the number 1 to have 3 digits 1 -> 001
         string temp = inttobin(mt[i]); //turning the decimal value of a number into a string representing the binary value
@@ -204,6 +212,7 @@ void removeDuplicates(){
 int main() {
     string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
     read_input(file);
+
     binaryReps();
     generateOnesforminterms();
     fill_struct();
