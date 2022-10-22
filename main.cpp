@@ -27,6 +27,10 @@ vector<int> mtOnes, dcOnes; //number of ones in each binary number
 
 vector<int> valid; //an array to use inside the validation function
 
+string let[20] = { "A","B", "C", "D", "E", "F", "G", "H", "I","J", "K", "L", "M", "N", "O", "P", "Q","R", "S", "T" } ;//variables for boolean function
+vector<string>letters;
+
+
 string inttobin(int n) { //using bitmasking to get the binary representation of each number
     string s = "";
     while (n > 0) {
@@ -344,6 +348,32 @@ void coverageChart() {
 //    }
 //}
 }
+
+vector<string> vrbs() { // function to get the equivilent variables
+        for(int i = 0; i<minimizedBool.size(); i++)
+        letters.pushback(let[i]); // push the variables in an array to later assign them to the bits
+            return letters;
+}
+    
+void expression(){ //function to implement the boolean expressions using variables
+        string x=" ";
+        vector<string> v1 = vrbs();
+        for(int i = 0; i<minimizedBool.size(),i++){ //replace 0 with complement of variable and 1 with variable
+            if(minimizedBool[i] == '+'){
+                cout<<"  ,  "  }
+               if( minimizedBool[i] == '-') {
+                    if(minimizedBool[i] == '0')
+                        cout<< x + v1[i] + "'"<<endl ;
+                else
+                    cout<< x + v1[i]<<endl;;
+            }
+        }
+
+}
+
+
+
+
 int main() {
     string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
     read_input(file);
@@ -362,6 +392,8 @@ int main() {
     print(primes);
     cout << endl << endl;
     coverageChart();
-
+    vrbs();
+    expression();
+    
     return 0;
 }
