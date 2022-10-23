@@ -157,6 +157,7 @@ void print(vector<minterm> pi) { //printing to check the vector
             cout << "m" << pi[i].ms[pi[i].ms.size() - 1].decimal << setw(35) << pi[i].binary << setw(33) << pi[i].numof1s << endl;
         }
     }
+    cout<< endl;
 }
 
 bool compareMTs(minterm& a, minterm& b, minterm& c) { //function to compare minterms by 1 bit difference
@@ -355,7 +356,7 @@ void coverageChart() {
         if (cx > 0) minimizedBool.insert(primes[row].binary);
     }
 
-    cout << endl << endl;
+    cout << endl;
     for(int i = 0; i < primes.size(); i++){ //printing the coverage chart
         if(primes[i].ms.size() == 0) cout << primes[i].decimal << ": ";
         else cout << primes[i].binary << ": ";
@@ -364,7 +365,7 @@ void coverageChart() {
         }cout << endl;
     }
 
-    cout << endl << endl << "Minimized boolean expression = ";
+    cout << endl << "Minimized boolean expression = ";
     int i = 0;
     for (auto x : minimizedBool) {
         if (i < minimizedBool.size() - 1)
@@ -432,6 +433,7 @@ int main() {
     //cout << "\t\t\tAFTER REMOVING DUPLICATES\n";
     removeDuplicates();
     print(primes);
+    cout << "COVERAGE CHART \n\n";
     coverageChart();
     cout << endl;
     expression();
