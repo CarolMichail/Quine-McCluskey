@@ -27,7 +27,7 @@ vector<int> mtOnes, dcOnes; //number of ones in each binary number
 
 vector<int> valid; //an array to use inside the validation function
 
-string inttobin(int n) { //using bitmasking to get the binary representation of each number
+string inttobin(int n) { //using bit masking to get the binary representation of each number
     string s = "";
     while (n > 0) {
         if (n & 1) s = '1' + s;
@@ -38,27 +38,32 @@ string inttobin(int n) { //using bitmasking to get the binary representation of 
 }
 void read_input(string file) //funtion to read the txt file
 {
-    vector<string> lines; // a vector to contain each line
-    ifstream mts;
-    mts.open(file);
-    if (!mts.is_open()) cout << "ERROR OPENING FILE \n"; // check if the file opened or not
-    string line;
+vector<string> lines; // a vector to contain each line
+ifstream mts;
+mts.open(file);
+if (!mts.is_open()) cout << "ERROR OPENING FILE \n"; // check if the file opened or not
+string line;
 
-    while (getline(mts, line)) {
-        lines.push_back(line); //reading in each line
-    }
-    bits = stoi((lines[0])); //assignning the first line to the # of bits
-    stringstream s(lines[1]);
-    string temp;
-    while (s >> temp) { //push back each minterm into a vector
-        mt.push_back(stoi(temp));
-    }
-    stringstream dcs(lines[2]);
-    while (dcs >> temp) {// push back each don't care term into a vector
-        dc.push_back(stoi(temp));
-    }
+while (getline(mts, line)) {
+lines.push_back(line); //reading in each line
+}
+if(lines.size()!=3)
+{
+cout<<"PLEASE ENTER A VALID FILE\n";
+return;
+}
+bits = stoi((lines[0])); //assignning the first line to the # of bits
+stringstream s(lines[1]);
+string temp;
+while (s >> temp) { //push back each minterm into a vector
+mt.push_back(stoi(temp));
+}
+stringstream dcs(lines[2]);
+while (dcs >> temp) {// push back each don't care term into a vector
+dc.push_back(stoi(temp));
+}
 
-    mts.close();
+mts.close();
 }
 
 bool validation() {
@@ -97,11 +102,11 @@ void binaryReps() {
 }
 
 int generateOnes(string binary) {  //function that counts the number 1's in each number
-    int ones = 0;
-    for (int j = 0; j < bits; j++) {
-        if (binary[j] == '1') ones++;
-    }
-    return ones;
+int ones = 0;
+for (int j = 0; j < bits; j++) {
+if (binary[j] == '1') ones++;
+}
+return ones;
 }
 
 void generateOnesforminterms() { //a function that counts the ones for each binary value and puts them in vectors for minterms and don't cares
@@ -218,58 +223,21 @@ void removeDuplicates() {
         pis.insert(mts[i].binary);
         bool mtp = true;
         if (pis.size() != increase){
-            if(mts[i].ms.size() != 0){
-            mtp = false;
-             //to check if all minterms creating it are dc
-            for(auto x : mts[i].ms){
-                if(x.dc == false) mtp = true;
-            }}
+            if(mts[i].ms.size() != 0){ // this solves the problem of having a minterm alone(not created from others)
+                mtp = false;
+                //to check if all minterms creating it are dc
+                for(auto x : mts[i].ms){
+                    if(x.dc == false) mtp = true;
+                }}
             if(!mts[i].paired && mtp) primes.push_back(mts[i]); //if it is unique AND has not been paired w another minterm or prime implicant, then it will be used in the coverage chart
         }
     }
 }
-//void coverage_chart() // all the syntax and names are wrong!!
-//{
-//    //vector<int> primes; // need to put them by order so that we can compare each one to the next
-//    vector<minterm> epi;
-//    vector<vector<int>> cross;
-////    for (int i = 0; i < primes.size(); i++)
-////    {
-////        for (int j = 0; j < primes[i].ms.size(); j++)
-////        {// loop over the columns the prime implicants that we got from the table
-////            if (primes[i].ms[j].decimal == mt)
-////                cross[i] = mt;
-////            cross[i][0]++;
-////        }
-////    }
-//
-//    // sort(cross.begin(), cross.end())
-//    for (int i = 0; i < cross.size(); i++)
-//    {
-//        if (cross[i][0] == 1)
-//        {
-//            // epi.push_back(cross[i]);
-//            cross[i][0]--;
-//            cross[i].clear();
-//        }
-//        else if (cross[i][0] <= cross[i + 1][0])
-//        {
-//            // epi.push_back(cross[i]);
-//            cross[i][0]--;
-//            cross[i].clear();
-//            //push back the prime implicant that knzy is gonna send
-//        }
-//    }
-//    print(epi);
-//    //  return the epi vector and display it
-//}
 
 void coverageChart() {
-    vector<vector<char>> chart(primes.size(), vector<char>(mt.size(),
-                                                           '-')); //initialize the 2d matrix s.t. the rows are the pi's and the cols are the minterms
+    vector<vector<char>> chart(primes.size(), vector<char>(mt.size(),  '-')); //initialize the 2d matrix s.t. the rows are the pi's and the cols are the minterms
 
-    for (int i = 0; i <
-                    primes.size(); i++) { // for every prime implicant we check the minterms it covers by overwriting the '-' with an 'x'
+    for (int i = 0; i < primes.size(); i++) { // for every prime implicant we check the minterms it covers by overwriting the '-' with an 'x'
         if (!(int) primes[i].ms.size()) { //if it's a minterms, just cross out its minterm
             for (int j = 0; j < (int) mt.size(); j++) {
                 if (mt[j] == primes[i].decimal) chart[i][j] = 'x';
@@ -294,7 +262,7 @@ void coverageChart() {
 
     int count, index;
     for(int cols = 0; cols < mt.size(); cols++){
-         count = 0, index = 0;
+        count = 0, index = 0;
         for(int rows = 0; rows < primes.size(); rows++){
             if(chart[rows][cols] == 'x'){
                 count++;
@@ -345,7 +313,7 @@ void coverageChart() {
 //}
 }
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
+    string file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms3.txt)";
     read_input(file);
     if (!validation()) {
         cout << "INVALID INPUT" << endl;
