@@ -101,7 +101,7 @@ void binaryReps() {
     }
 }
 
-int generateOnes(string binary) {  //function that counts the number 1's in each number
+int generateOnes(string binary) {  //function that counts the number 1's in each number we need this one seperatly because we are going to use it in the middle
     int ones = 0;
     for (int j = 0; j < bits; j++) {
         if (binary[j] == '1') ones++;
@@ -222,10 +222,10 @@ void removeDuplicates() {
         bool mtp = true;
         if (pis.size() != increase){
             if(mts[i].ms.size() != 0){
-            mtp = false;//to check if all minterms creating it are dc
-            for(auto x : mts[i].ms){
-                if(x.dc == false) mtp = true;
-            }}
+                mtp = false;//to check if all minterms creating it are dc
+                for(auto x : mts[i].ms){
+                    if(x.dc == false) mtp = true;
+                }}
             if(!mts[i].paired && mtp) primes.push_back(mts[i]); //if it is unique AND has not been paired w another minterm or prime implicant, then it will be used in the coverage chart
         }
     }
@@ -384,14 +384,40 @@ void expression(){
                 w += let[i];
             }else if(pi[i] == '0') w+= let[i]+'`';
         } if(i < minimizedBool.size() - 1)
-                cout << w << " + ";
-            else cout << w << "\n";
-            i++;
+            cout << w << " + ";
+        else cout << w << "\n";
+        i++;
     }
 }
 
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms10.txt)";//put the name/directory of the txt file
+    string file;
+    int in;
+    cout<<"Please enter the file  number from 1-10 you want to test";
+    cin>> in;
+
+    if ( in==1) file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms2.txt)";
+    if ( in==2)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms3.txt)";
+    if ( in==3)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms4.txt)";
+    if ( in==4)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms5.txt)";
+    if ( in==5)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms6.txt)";
+
+    if ( in==6)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms7.txt)";
+    if ( in==7)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms8.txt)";
+    if ( in==8)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms9.txt)";
+    if ( in==9)
+        file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms10.txt)";
+    if ( in==10)
+    {  file = R"(C:/Users/CG/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/minterms.txt)";}
+
+    //put the name/directory of the txt file
     read_input(file);
     if (!validation()) {
         cout << "INVALID INPUT" << endl;

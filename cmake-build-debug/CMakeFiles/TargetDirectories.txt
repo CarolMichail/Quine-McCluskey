@@ -1,3 +1,0 @@
-C:/Users/DELL/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/cmake-build-debug/CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir
-C:/Users/DELL/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/DELL/Documents/GitHub/DigitalDesignProj1-QuinnMclusky/cmake-build-debug/CMakeFiles/rebuild_cache.dir
