@@ -61,6 +61,12 @@
 }</component>
   <component name="RunManager">
     <configuration name="DigitalDesignProj1_QuinnMclusky" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" TARGET_NAME="DigitalDesignProj1_QuinnMclusky" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" RUN_TARGET_NAME="DigitalDesignProj1_QuinnMclusky">
+
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -76,6 +82,7 @@
       <updated>1666092044918</updated>
       <workItem from="1666092047188" duration="11657000" />
       <workItem from="1666483690984" duration="7102000" />
+      <workItem from="1666092047188" duration="13783000" />
     </task>
     <servers />
   </component>
