@@ -392,7 +392,7 @@ void expression(){
 }
 
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms10.txt)";//put the name/directory of the txt file
+    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";//put the name/directory of the txt file
     read_input(file);
     if (!validation()) {
         cout << "INVALID INPUT" << endl;

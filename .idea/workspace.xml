@@ -60,13 +60,12 @@
   }
 }</component>
   <component name="RunManager">
-    <configuration name="DigitalDesignProj1_QuinnMclusky" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" TARGET_NAME="DigitalDesignProj1_QuinnMclusky" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" RUN_TARGET_NAME="DigitalDesignProj1_QuinnMclusky">
-
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="DigitalDesignProj1_QuinnMclusky" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" TARGET_NAME="DigitalDesignProj1_QuinnMclusky" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DigitalDesignProj1_QuinnMclusky" RUN_TARGET_NAME="DigitalDesignProj1_QuinnMclusky">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -83,6 +82,7 @@
       <workItem from="1666092047188" duration="11657000" />
       <workItem from="1666483690984" duration="7102000" />
       <workItem from="1666092047188" duration="13783000" />
+      <workItem from="1666505699837" duration="4000" />
     </task>
     <servers />
   </component>
