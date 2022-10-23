@@ -5,6 +5,9 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <stack>
+#include <set>
+#include <algorithm>
 using namespace std;
 
 struct minterm {
@@ -16,7 +19,7 @@ struct minterm {
     bool dc = false; //determine whether it's a don't care or not, we only need to determine it for when we creat ethe coverage chart
 };
 
-vector<string> minimizedBool;
+set<string> minimizedBool;
 vector<minterm> primes; //the prime implicants genertaed after the tabulation method and to be used in the coverage chart
 
 vector <minterm> mts; //list of all the terms, don't cares and minterms
@@ -53,9 +56,11 @@ void read_input(string file) //funtion to read the txt file
     while (s >> temp) { //push back each minterm into a vector
         mt.push_back(stoi(temp));
     }
-    stringstream dcs(lines[2]);
-    while (dcs >> temp) {// push back each don't care term into a vector
-        dc.push_back(stoi(temp));
+    if (lines.size() == 3) { //in case we have no don't care terms
+        stringstream dcs(lines[2]);
+        while (dcs >> temp) {// push back each don't care term into a vector
+            dc.push_back(stoi(temp));
+        }
     }
 
     mts.close();
@@ -115,7 +120,7 @@ void generateOnesforminterms() { //a function that counts the ones for each bina
     }
 }
 
-void fill_struct() { //we're filling the vector of structs
+void fill_struct() { //we're filling vector of structs
     for (int i = 0; i < mt.size(); i++) {
         struct minterm obj; //we create an instance and then push into the vector
         obj.decimal = mt[i];
@@ -163,11 +168,9 @@ bool compareMTs(minterm& a, minterm& b, minterm& c) { //function to compare mint
         }
     }
     if (diff == 1 ) { // the prime implicant is not made up of two don't care terms
-        //if(!a.dc || !b.dc) c.dc = true;
         a.paired = true;
         b.paired = true; //making sure that these minterms have been paired w smth
         string temp = a.binary; temp[index] = '-';
-        //cout << temp;
         c.binary = temp;
         if (a.ms.size() == 0 && b.ms.size() == 0) { //we are checking to see if the values that made the pi up are minterms or other pi's
             //if the size of the minterms that made the pi up is zero, that means it's a minterm, if not, THEN it's a prime implicant
@@ -219,8 +222,7 @@ void removeDuplicates() {
         bool mtp = true;
         if (pis.size() != increase){
             if(mts[i].ms.size() != 0){
-            mtp = false;
-             //to check if all minterms creating it are dc
+            mtp = false;//to check if all minterms creating it are dc
             for(auto x : mts[i].ms){
                 if(x.dc == false) mtp = true;
             }}
@@ -228,57 +230,28 @@ void removeDuplicates() {
         }
     }
 }
-//void coverage_chart() // all the syntax and names are wrong!!
-//{
-//    //vector<int> primes; // need to put them by order so that we can compare each one to the next
-//    vector<minterm> epi;
-//    vector<vector<int>> cross;
-////    for (int i = 0; i < primes.size(); i++)
-////    {
-////        for (int j = 0; j < primes[i].ms.size(); j++)
-////        {// loop over the columns the prime implicants that we got from the table
-////            if (primes[i].ms[j].decimal == mt)
-////                cross[i] = mt;
-////            cross[i][0]++;
-////        }
-////    }
-//
-//    // sort(cross.begin(), cross.end())
-//    for (int i = 0; i < cross.size(); i++)
-//    {
-//        if (cross[i][0] == 1)
-//        {
-//            // epi.push_back(cross[i]);
-//            cross[i][0]--;
-//            cross[i].clear();
-//        }
-//        else if (cross[i][0] <= cross[i + 1][0])
-//        {
-//            // epi.push_back(cross[i]);
-//            cross[i][0]--;
-//            cross[i].clear();
-//            //push back the prime implicant that knzy is gonna send
-//        }
-//    }
-//    print(epi);
-//    //  return the epi vector and display it
-//}
 
 void coverageChart() {
-    vector<vector<char>> chart(primes.size(), vector<char>(mt.size(),
-                                                           '-')); //initialize the 2d matrix s.t. the rows are the pi's and the cols are the minterms
+    vector<vector<char>> chart(primes.size(), vector<char>(mt.size(),'-')); //initialize the 2d matrix s.t. the rows are the pi's and the cols are the minterms
+    vector<pair<int, vector<int>>> xcount(mt.size()); //this vector saves the number of pi's that cover each minterm and the prime implicant that cover the minterms location
 
-    for (int i = 0; i <
-                    primes.size(); i++) { // for every prime implicant we check the minterms it covers by overwriting the '-' with an 'x'
+    for (int i = 0; i < primes.size(); i++) { // for every prime implicant we check the minterms it covers by overwriting the '-' with an 'x'
         if (!(int) primes[i].ms.size()) { //if it's a minterms, just cross out its minterm
             for (int j = 0; j < (int) mt.size(); j++) {
-                if (mt[j] == primes[i].decimal) chart[i][j] = 'x';
-
+                if (mt[j] == primes[i].decimal) { //if it covers the same minterm as the column we are currently at, put an x
+                    chart[i][j] = 'x';
+                    xcount[j].first++; //the number of x's under each minterm/column
+                    xcount[j].second.push_back(i); //the pi's coverig it, we save its row
+                }
             }
         } else { //if it's a prime implicant. then cross out the minterms it covers
             for (int j = 0; j < (int) primes[i].ms.size(); j++) {
                 for (int x = 0; x < mt.size(); x++) {
-                    if (primes[i].ms[j].decimal == mt[x]) chart[i][x] = 'x';
+                    if (primes[i].ms[j].decimal == mt[x]) {
+                        chart[i][x] = 'x';
+                        xcount[x].first++;
+                        xcount[x].second.push_back(i);
+                    }
                 }
             }
         }
@@ -292,22 +265,96 @@ void coverageChart() {
         }cout << endl;
     }
 
-    int count, index;
-    for(int cols = 0; cols < mt.size(); cols++){
-         count = 0, index = 0;
-        for(int rows = 0; rows < primes.size(); rows++){
-            if(chart[rows][cols] == 'x'){
-                count++;
-                index = rows;
+    // find single x and change it to d, store row and col index in vector
+    vector<pair<int, int>> changed; //saves the indices of the changed x's to d
+    for (int i = 0; i < mt.size(); i++) {
+        if (xcount[i].first == 1) {
+            for (int j = 0; j < mt.size(); j++) {
+                int row = xcount[i].second[0]; //we set the row as fixed
+                if (chart[row][j] == 'x') {  //then we iterate over that row and mark all the x's as d's
+                    chart[row][j] = 'd';
+                    changed.push_back({row, j}); //save their locations so that we can go and cross out these prime implicant's vertical to the epi columns
+                }
             }
-        }
-        if(count == 1){
-            for(int col = 0; col < mt.size(); col++){
-                if(chart[index][col] == 'x') chart[index][col] = 'd';
-            }
-            minimizedBool.push_back(primes[index].binary);
         }
     }
+    for(auto x: changed) minimizedBool.insert(primes[x.first].binary); // add primes that were first chosen
+
+    // for each prime implicant, change the x in the cols in vector
+    for(auto x: changed) { //the indices obtained are used to cross out the columns by fixing the columns and jumping between rows
+        for (int row = 0; row < primes.size(); row++) {
+            if (chart[row][x.second] == 'x') {
+                chart[row][x.second] = 'd';
+            }
+        }
+    }
+
+    set<int> dom_cols;
+    for (int col = 0; col < mt.size(); col++) { //remove dominating col
+        for (int k = col + 1; k < mt.size(); k++) {
+            int c1 = 0, c2 = 0; //c1 counts the x's in the same column, c2 counts the x's in the 2nd column
+            int c = 0; //this c counts the x's that share the same column
+            for (int row = 0; row < primes.size(); row++) {
+                if (chart[row][col] == 'x') c1++;
+                if (chart[row][k] == 'x') c2++;
+                if (chart[row][col] == 'x' && chart[row][k] == 'x') c++;
+            }
+            if((c == c1 || c == c2) && c) { // check if one column dominates another
+                int choice;
+                if (c1 > c2) choice = col;
+                else choice = k;
+                dom_cols.insert(choice);
+            }
+        }
+    }
+
+//    cout << "\nDominating columns: ";
+    for (auto choice : dom_cols) {
+        for (int row = 0; row < primes.size(); row++) {
+            if (chart[row][choice] == 'x') chart[row][choice] = 'd'; // set dominating column's x's to 'd'
+        }
+        //cout << mt[choice] << " ";
+    }
+
+    // find dominated rows
+    set<int> dom_rows;
+    for (int row = 0; row < primes.size(); row++) {
+        for (int k = row+1; k < primes.size(); k++) {
+            int r1 = 0, r2 = 0; //checks the x's in each row
+            int r = 0; //checks for common x's
+            for (int col = 0; col < mt.size(); col++) {
+                if (chart[row][col] == 'x') r1++;
+                if (chart[k][col] == 'x') r2++;
+                if (chart[row][col] == 'x' && chart[k][col] == 'x') r++;
+            }
+            if ((r == r1 || r == r2) && r) { // check if one row dominates another
+                int choice;
+                if (r1 < r2) choice = row; // whichever row has less x's is the dominated AKA the one we need to cross out
+                else choice = k;
+//                cout << "row: " << row << ", k: " << k << endl;
+//                cout << primes[row].binary << " dominates " << primes[k].binary << endl;
+                dom_rows.insert(choice);
+            }
+        }
+    }
+//    cout << "\nDominated rows: ";
+//    for (auto choice : dom_rows) {
+//        cout << primes[choice].binary << " ";
+//    }
+    for (auto choice : dom_rows) {
+        for (int col = 0; col < mt.size(); col++) {
+            if (chart[choice][col] == 'x') chart[choice][col] = 'd'; // set dominated to 'd'
+        }
+    }
+
+    for (int row = 0; row < primes.size(); row++) { //after removing the dominating columns and dominated rows, we start taking the prime implicants left and including them in the minimized boolean expression
+        int cx = 0; //number of x's
+        for (int col = 0; col < mt.size(); col++) {
+            if (chart[row][col] == 'x') cx++;
+        }
+        if (cx > 0) minimizedBool.insert(primes[row].binary);
+    }
+
     cout << endl << endl;
     for(int i = 0; i < primes.size(); i++){ //printing the coverage chart
         if(primes[i].ms.size() == 0) cout << primes[i].decimal << ": ";
@@ -317,35 +364,34 @@ void coverageChart() {
         }cout << endl;
     }
 
-    cout << endl << endl << " Minimized boolean expression = ";
-    for(int i = 0; i < minimizedBool.size(); i++) cout << minimizedBool[i] << " + ";
-
-//    for (int i = 0; i < mt.size(); i++) { //setting the columns
-//        int count = 0, index = 0;
-//        for (int j = 0; j < primes.size(); j++) { //iterating over the rows
-//            if (chart[i][j] == 'x') {
-//                count++;
-//                index = i;
-//            }
-//    }if(count == 1){
-//        for(int x = 0; x < mt.size();x++)
-//        {
-//           if(chart[x][index] == 'x') chart[x][index] = 'd';
-//        }
-//        }
-//    }
-
-//    for(int i = 0; i < primes.size(); i++){ //printing the coverage chart
-//        if(primes[i].ms.size() == 0) cout << primes[i].decimal << ": ";
-//        else cout << primes[i].binary << ": ";
-//        for(int j = 0; j < mt.size(); j++){
-//            cout << chart[i][j] << " ";
-//        }cout << endl;
-//    }
-//}
+    cout << endl << endl << "Minimized boolean expression = ";
+    int i = 0;
+    for (auto x : minimizedBool) {
+        if (i < minimizedBool.size() - 1)
+            cout << x << " + ";
+        else cout << x << "\n";
+        i++;
+    }
 }
+
+void expression(){
+    string let[20] = { "A","B", "C", "D", "E", "F", "G", "H", "I","J", "K", "L", "M", "N", "O", "P", "Q","R", "S", "T"};
+    int i = 0;
+    for(auto pi : minimizedBool){
+        string w = "";
+        for(int i = 0; i < pi.size(); i++){
+            if(pi[i] == '1'){
+                w += let[i];
+            }else if(pi[i] == '0') w+= let[i]+'`';
+        } if(i < minimizedBool.size() - 1)
+                cout << w << " + ";
+            else cout << w << "\n";
+            i++;
+    }
+}
+
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";
+    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms10.txt)";//put the name/directory of the txt file
     read_input(file);
     if (!validation()) {
         cout << "INVALID INPUT" << endl;
@@ -356,12 +402,13 @@ int main() {
     fill_struct();
     sort(mts.begin(), mts.end(), compareOnes);
     tabulationMethod();
-    print(mts);
-    cout << endl << endl << "AFTER REMOVING DUPLICATES\n";
+    //print(mts);
+    //cout << "\t\t\tAFTER REMOVING DUPLICATES\n";
     removeDuplicates();
     print(primes);
-    cout << endl << endl;
     coverageChart();
+    cout << endl;
+    expression();
 
     return 0;
 }
