@@ -1,7 +1,9 @@
 # ninja log v5
-6	3441	6882079532450713	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	4a958694aeb86386
-3441	3913	6882079537175928	DigitalDesignProj1_QuinnMclusky.exe	f290330922f80ae2
-1	3664	6882089101994281	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	4a958694aeb86386
-3665	4104	6882089106433640	DigitalDesignProj1_QuinnMclusky.exe	f290330922f80ae2
 21	13252	6882089359599638	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	4a958694aeb86386
 13255	14655	6882089373580797	DigitalDesignProj1_QuinnMclusky.exe	f290330922f80ae2
+2	3876	6883042108868171	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	189598131097e5ff
+3880	4358	6883042113672895	DigitalDesignProj1_QuinnMclusky.exe	1631f7abd715dc7
+13	13377	6883047807664480	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	189598131097e5ff
+13379	14442	6883047818365000	DigitalDesignProj1_QuinnMclusky.exe	1631f7abd715dc7
+7	6681	6883050214105871	CMakeFiles/DigitalDesignProj1_QuinnMclusky.dir/main.cpp.obj	189598131097e5ff
+6686	7226	6883050219557707	DigitalDesignProj1_QuinnMclusky.exe	1631f7abd715dc7

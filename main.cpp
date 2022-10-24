@@ -65,14 +65,19 @@ void read_input(string file) //funtion to read the txt file
 
     mts.close();
 }
-
 bool validation() {
     for (int i = 0; i < mt.size(); i++) valid.push_back(mt[i]);
     for (int i = 0; i < dc.size(); i++) valid.push_back(dc[i]);
     sort(valid.begin(), valid.end());
     for (int i = 0; i < valid.size() - 1; i++) {
-        if (valid[i] == valid[i + 1] || valid[i] > pow(2, bits)) return false;
-    } return true;
+        if (valid[i] == valid[i + 1])
+            return false;
+    }
+    for (int i = 0; i < valid.size() ; i++) {
+        if(valid[i] > pow(2, bits)-1)
+            return false;
+    }
+    return true;
 }
 
 void binaryReps() {
@@ -223,10 +228,10 @@ void removeDuplicates() {
         bool mtp = true;
         if (pis.size() != increase){
             if(mts[i].ms.size() != 0){
-            mtp = false;//to check if all minterms creating it are dc
-            for(auto x : mts[i].ms){
-                if(x.dc == false) mtp = true;
-            }}
+                mtp = false;//to check if all minterms creating it are dc
+                for(auto x : mts[i].ms){
+                    if(x.dc == false) mtp = true;
+                }}
             if(!mts[i].paired && mtp) primes.push_back(mts[i]); //if it is unique AND has not been paired w another minterm or prime implicant, then it will be used in the coverage chart
         }
     }
@@ -385,14 +390,14 @@ void expression(){
                 w += let[i];
             }else if(pi[i] == '0') w+= let[i]+'`';
         } if(i < minimizedBool.size() - 1)
-                cout << w << " + ";
-            else cout << w << "\n";
-            i++;
+            cout << w << " + ";
+        else cout << w << "\n";
+        i++;
     }
 }
 
 int main() {
-    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms.txt)";//put the name/directory of the txt file
+    string file = R"(C:\Users\DELL\Documents\GitHub\DigitalDesignProj1-QuinnMclusky\minterms9.txt)";//put the name/directory of the txt file
     read_input(file);
     if (!validation()) {
         cout << "INVALID INPUT" << endl;
